@@ -1,0 +1,21 @@
+import React from 'react'
+
+function TableHeader({ columns, onSort, sortColumn }) {
+  return (
+    <thead>
+      {columns.map((column) => (
+        <th onClick={onSort('title')}>{column.lable}</th>
+      ))}
+      <tr>
+        {/*        <th onClick={onSort('title')}>Title</th>
+        <th onClick={onSort('genre.name')}>Genre</th>
+        <th onClick={onSort('numberInStock')}>Stock</th>
+        <th onClick={onSort('dailyRentalRate')}>Rate</th> */}
+        <th />
+        <th />
+      </tr>
+    </thead>
+  )
+}
+
+export default TableHeader
