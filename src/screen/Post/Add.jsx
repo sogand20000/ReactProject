@@ -14,7 +14,6 @@ function Add(props) {
       'https://jsonplaceholder.typicode.com/posts',
       post
     )
-    console.log(nn)
   }
   const handelClick = () => {
     setPost({ title: titleRef.current.value, body: bodyRef.current.value })

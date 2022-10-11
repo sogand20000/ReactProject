@@ -1,4 +1,6 @@
 import * as getGenres from './genreService'
+import axios from './httpService'
+import config from '../config.json'
 
 const movies = [
   {
@@ -69,7 +71,7 @@ const movies = [
 ]
 
 export function getMovies() {
-  return movies
+  return axios.get(config.apiUrl + '/movies')
 }
 
 export function getMovie(id) {
