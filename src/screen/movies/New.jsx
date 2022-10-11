@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Input from '../../component/Input'
 import Form from '../../component/Form'
 import Select from '../../component/Select'
-import { getGenres } from '../../services/fakeGenreService'
+import { getGenres } from '../../services/genreService'
 import {
   getMovies,
   saveMovie,

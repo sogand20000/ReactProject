@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getMovies } from '../services/fakeMoviesService'
-import { getGenres } from '../services/fakeGenreService'
+import { getGenres } from '../services/genreService'
 import { Container, Row, Col } from 'react-bootstrap'
 import Pagination from '../component/Pagination'
 import MoviesTable from '../component/MoviesTable'
@@ -14,11 +14,18 @@ function Movies() {
   const [totalCount, setTotalCount] = useState(getMovies().length)
   const [pageSize, setPageSize] = useState(5)
   const [searchInput, setSearchInput] = useState('')
-  const [genres, setGenres] = useState([
-    { _id: '', name: 'All Genres' },
-    ...getGenres(),
-  ])
-  const [itemActive, setItemActive] = useState()
+  const [genres, setGenres] = useState([])
+  const [itemActive, setItemActive] = useState('')
+
+  const getItemsGenre = async () => {
+    const { data } = await getGenres()
+    const items = [{ _id: '', name: 'All Genres' }, ...data]
+    setGenres(items)
+  }
+
+  useEffect(() => {
+    getItemsGenre()
+  }, [])
 
   const handlePageChange = (page) => {
     setCurrentPage(page)
@@ -37,15 +44,10 @@ function Movies() {
   const handelSelectGenre = (genreItem) => {
     setItemActive(genreItem._id)
     setCurrentPage(1)
+    console.log(itemActive)
   }
   const handleSearch = (e) => {
-    const searchitem = e.target.value
-    //setSearchInput(searchitem)
-    console.log('====================================')
-    console.log(e.target.value)
-    console.log('====================================')
     if (e.target.value) {
-      // setSearchInput(searchitem)
       const data = getMovies().filter((item) =>
         item.title.includes(e.target.value)
       )
@@ -54,6 +56,7 @@ function Movies() {
       setMoveis(getMovies())
     }
   }
+
   return (
     <>
       <Container>
