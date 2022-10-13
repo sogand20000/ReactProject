@@ -1,6 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import { redirect } from 'react-router-dom'
+import { LockFill } from 'react-bootstrap-icons'
 
 export default function TableBody({ data, columns }) {
   const renderCell = (item, column) => {
@@ -21,7 +22,7 @@ export default function TableBody({ data, columns }) {
         <tr
           key={item._id || item.id}
           onDoubleClick={(event) =>
-            (window.location.href = `/moveis/${item._id}`)
+            (window.location.href = `/Movies/${item._id}`)
           }
         >
           {columns.map((col) => (

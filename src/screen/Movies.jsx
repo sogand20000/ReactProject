@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getMovies } from '../services/fakeMoviesService'
+import { getMovies } from '../services/moviesService'
 import { getGenres } from '../services/genreService'
 import { Container, Row, Col } from 'react-bootstrap'
 import Pagination from '../component/Pagination'
@@ -23,6 +23,7 @@ function Movies() {
   }
   const getItemsMovie = async () => {
     const { data } = await getMovies()
+
     setMoveis(data)
     setdataforSearch(data)
 
