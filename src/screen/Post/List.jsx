@@ -6,21 +6,24 @@ import axios from '../../services/httpService'
 import config from '../../config.json'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+
+import { saveMovie } from '../../services/moviesService'
 function List(props) {
   const [data, setData] = useState([])
 
   const deleteItem = async () => {
-    const originalData = data
-    const posts = data.filter((p) => p.id !== 2)
-    setData(posts)
+    //const originalData = data
+    //const posts = data.filter((p) => p.id !== 2)
+    //setData(posts)
     try {
-      await axios.delete('sdsd' + config.apiEndpoint + '/2')
+      // const result = await saveMovie((movie._id = 2))
+      //axios.delete('sdsd' + config.apiEndpoint + '/2')
     } catch (er) {
       console.log('HANDLE DELETE CATCH BLOCK')
       if (er.response && er.response.status === 404)
         alert('THIS POST HAS ALREADY BEEN DELETED')
 
-      setData(originalData)
+      // setData(originalData)
     }
   }
   const updateItem = async () => {
