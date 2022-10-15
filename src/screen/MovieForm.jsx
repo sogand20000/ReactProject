@@ -4,7 +4,6 @@ function MovieForm(props) {
   let location = useLocation()
   let navigate = useNavigate()
   let params = useParams()
-  console.log(params.id)
   return (
     <div>
       {params.id}

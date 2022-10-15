@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { getMovies } from '../services/fakeMoviesService'
-import { getGenres } from '../services/fakeGenreService'
+import { getMovies } from '../services/moviesService'
+import { getGenres } from '../services/genreService'
 import { Container, Row, Col } from 'react-bootstrap'
 import Pagination from '../component/Pagination'
 import MoviesTable from '../component/MoviesTable'
@@ -9,16 +9,31 @@ import _ from 'lodash'
 import paginate from '../utils/paginate'
 import Genre from '../screen/genre'
 function Movies() {
-  const [moveis, setMoveis] = useState(getMovies())
+  const [moveis, setMoveis] = useState()
   const [currentPage, setCurrentPage] = useState(1)
-  const [totalCount, setTotalCount] = useState(getMovies().length)
   const [pageSize, setPageSize] = useState(5)
   const [searchInput, setSearchInput] = useState('')
-  const [genres, setGenres] = useState([
-    { _id: '', name: 'All Genres' },
-    ...getGenres(),
-  ])
-  const [itemActive, setItemActive] = useState()
+  const [genres, setGenres] = useState([])
+  const [itemActive, setItemActive] = useState('')
+  const [dataforSearch, setdataforSearch] = useState()
+  const getItemsGenre = async () => {
+    const { data } = await getGenres()
+    const items = [{ _id: '', name: 'All Genres' }, ...data]
+    setGenres(items)
+  }
+  const getItemsMovie = async () => {
+    const { data } = await getMovies()
+
+    setMoveis(data)
+    setdataforSearch(data)
+
+    return data
+  }
+
+  useEffect(() => {
+    getItemsGenre()
+    getItemsMovie()
+  }, [])
 
   const handlePageChange = (page) => {
     setCurrentPage(page)
@@ -27,10 +42,8 @@ function Movies() {
   const filtered = itemActive
     ? moveis.filter((m) => m.genre._id === itemActive)
     : moveis
-
   const moviespaginate = paginate(filtered, currentPage, pageSize)
-
-  const pagesCount = filtered.length / pageSize
+  const pagesCount = filtered?.length / pageSize
   if (pagesCount === 1) return null
   const pages = _.range(1, pagesCount + 1)
 
@@ -39,26 +52,21 @@ function Movies() {
     setCurrentPage(1)
   }
   const handleSearch = (e) => {
-    const searchitem = e.target.value
-    //setSearchInput(searchitem)
-    console.log('====================================')
-    console.log(e.target.value)
-    console.log('====================================')
     if (e.target.value) {
-      // setSearchInput(searchitem)
-      const data = getMovies().filter((item) =>
-        item.title.includes(e.target.value)
+      const data = dataforSearch.filter((item) =>
+        item.title.toLowerCase().includes(e.target.value.toLowerCase())
       )
       setMoveis(data)
     } else {
-      setMoveis(getMovies())
+      setMoveis(dataforSearch)
     }
   }
+
   return (
     <>
       <Container>
         <Row>
-          <p>Showing {/* {count} */} movies in the database.</p>
+          <p>Showing {dataforSearch?.length} movies in the database.</p>
           <Col lg="2">
             <Genre
               Items={genres}
@@ -77,7 +85,7 @@ function Movies() {
             <MoviesTable moviespaginate={moviespaginate}></MoviesTable>
 
             <Pagination
-              itemsCount={filtered.length}
+              itemsCount={filtered?.length}
               pagesCount={pagesCount}
               pages={pages}
               pageSize={pageSize}

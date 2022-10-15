@@ -31,6 +31,7 @@ const NavBar = () => {
               Customers
             </a>
           </li>
+
           <li className="nav-item">
             <a className="nav-link" href="Post/List">
               PostList
