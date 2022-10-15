@@ -4,14 +4,14 @@ import Form from '../component/Form'
 import Input from '../component/Input'
 import Joi from 'joi'
 import * as userService from '../services/userService'
-import { ToastContainer, toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 function Register(props) {
   const [errors, setErrors] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
-
+  let navigate = useNavigate()
   var schema = Joi.object().keys({
     passwordschema: Joi.string().required().min(5).label('Password'),
     usernameschema: Joi.string()
@@ -29,22 +29,20 @@ function Register(props) {
         usernameschema: username,
         passwordschema: password,
       })
-
-      const { status, statusText } = await userService.register({
+      const result = await userService.register({
         email: username,
         password: password,
         name: name,
       })
-      toast('Saved ' + statusText)
-
-      error ? setErrors(error.details[0].message) : setErrors('')
-      setErrors(error.details[0].message)
-    } catch (err) {}
+      localStorage.setItem('token', result.headers['x-auth-token'])
+      navigate('/')
+    } catch (error) {
+      if (error.response && error.response.status === 400)
+        setErrors(error.response.data)
+    }
   }
   return (
     <div>
-      <ToastContainer></ToastContainer>
-
       <h2>Register</h2>
       <Form onSubmit={handleSubmit} errors={errors}>
         <Input
